@@ -1,8 +1,43 @@
 import React, { Component } from 'react';
 import { Grid, Navbar, Row, Col, FormGroup, FormControl, ControlLabel, Form, Panel } from 'react-bootstrap';
+import { Route, Link, Switch, Redirect } from "react-router-dom";
 
 import get from './records';
 import './Home.css';
+
+class App extends Component {
+
+  render () {
+    return (
+      <div>
+
+        <Switch>
+          <Route exact={true} path='/' render={() =>
+            <Redirect to="/records" />
+          } />
+          <Route exact={true} path='/records' render={() =>
+            <div>
+              <LocalNavbar />
+              <Home />
+            </div>
+          } />
+          <Route path='/records/new' render={() =>
+            <div>
+              <LocalNavbar />
+              <Record isNew={true} />
+            </div>
+          } />
+          <Route path='/records/:id' render={({match}) =>
+            <div>
+              <LocalNavbar />
+              <Record recordId={match.params.id} />
+            </div>
+          } />
+        </Switch>
+      </div>
+    )
+  }
+}
 
 class Home extends Component {
 
@@ -30,12 +65,11 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <LocalNavbar />
         <SearchField
           searchFragment={this.state.searchFragment}
           onChange={this.handleSearchFragmentChange}
         />
-        <RecordList records={this.state.records} />
+        <RecordLinkList records={this.state.records} />
       </div>
     );
   }
@@ -93,12 +127,12 @@ class SearchField extends Component {
   }
 };
 
-class RecordList extends Component {
+class RecordLinkList extends Component {
 
   render() {
 
     const recElements = this.props.records.map((rec) =>
-      <Record record={rec} key={rec.id}/>
+      <RecordLink record={rec} key={rec.id}/>
     );
 
     return (
@@ -112,7 +146,7 @@ class RecordList extends Component {
 
 };
 
-class Record extends Component {
+class RecordLink extends Component {
 
   constructor(props) {
     super(props);
@@ -137,4 +171,35 @@ class Record extends Component {
 
 }
 
-export default Home;
+class Record extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isNew: false,
+      recordId: null
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.isNew) {
+      this.setState({
+        isNew: true
+      })
+    }
+
+    const id = parseInt(this.props.recordId);
+    if (!isNaN(id)) {
+      this.setState({
+        recordId: id
+      })
+    }
+  }
+
+  render() {
+    return (<h1>{this.state.recordId}</h1>)
+  }
+
+}
+
+export default App;
