@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Navbar, Row, Col, FormGroup, FormControl, ControlLabel, Form, Panel, Button } from 'react-bootstrap';
 import { Route, Link, Switch, Redirect } from "react-router-dom";
 
-import { getAll, get } from './records';
+import { getAll, get, Record as RecordModel } from './records';
 import './Home.css';
 
 class App extends Component {
@@ -177,7 +177,7 @@ class Record extends Component {
     super(props);
     this.state = {
       isNew: false,
-      record: {}
+      record: new RecordModel()
     }
   }
 
