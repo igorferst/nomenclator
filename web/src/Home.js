@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Grid, Navbar, Row, Col, FormGroup, FormControl, ControlLabel, Form, Panel } from 'react-bootstrap';
+import { Grid, Navbar, Row, Col, FormGroup, FormControl, ControlLabel, Form, Panel, Button } from 'react-bootstrap';
 import { Route, Link, Switch, Redirect } from "react-router-dom";
 
-import get from './records';
+import { getAll, get } from './records';
 import './Home.css';
 
 class App extends Component {
@@ -53,7 +53,7 @@ class Home extends Component {
 
   handleSearchFragmentChange(searchFragment) {
     this.setState({searchFragment: searchFragment});
-    get(searchFragment).then((records) => {
+    getAll(searchFragment).then((records) => {
       this.setState({records: records});
     });
   }
@@ -177,7 +177,7 @@ class Record extends Component {
     super(props);
     this.state = {
       isNew: false,
-      recordId: null
+      record: {}
     }
   }
 
@@ -186,18 +186,60 @@ class Record extends Component {
       this.setState({
         isNew: true
       })
+      return
     }
 
     const id = parseInt(this.props.recordId);
-    if (!isNaN(id)) {
-      this.setState({
-        recordId: id
-      })
+    if (isNaN(id)) {
+      console.error('Bad record ID: ' + this.props.recordId);
+      return;
     }
+
+    get(this.props.recordId).then((record) => {
+      this.setState({
+        record: record
+      })
+    })
+  }
+
+  onFormSubmit (event) {
+    event.preventDefault();
   }
 
   render() {
-    return (<h1>{this.state.recordId}</h1>)
+    return (
+      <Grid>
+        <h1>{this.props.isNew ? 'New' : 'Edit'} Record</h1>
+        <Form onSubmit={this.onFormSubmit}>
+
+          <Row>
+            <Col sm={6}>
+              <FormGroup controlId="formControlsName">
+                <ControlLabel>Name</ControlLabel>
+                <FormControl type="text" />
+              </FormGroup>
+            </Col>
+            <Col sm={6}>
+              <FormGroup controlId="formControlsKeywords">
+                <ControlLabel>Keywords</ControlLabel>
+                <FormControl type="text" />
+              </FormGroup>
+            </Col>
+          </Row>
+
+          <FormGroup controlId="formControlsNotes">
+            <ControlLabel>Notes</ControlLabel>
+            <FormControl componentClass="textarea" maxLength={1000} rows={6} />
+          </FormGroup>
+
+          <FormGroup>
+            <Link to="/records"><Button>Back</Button></Link>
+            <Button type="submit" bsStyle="primary" className="pull-right">Save</Button>
+          </FormGroup>
+
+        </Form>
+      </Grid>
+    )
   }
 
 }

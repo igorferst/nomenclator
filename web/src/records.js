@@ -1,7 +1,29 @@
 import axios from 'axios';
 import filter from 'lodash/filter';
 
-const get = function(searchFragment='') {
+class Record {
+    constructor(recordData) {
+        this.id = recordData.id;
+        this.name = recordData.name;
+        this.nickname = recordData.nickname;
+        this.notes = recordData.notes;
+    }
+}
+
+const get = function(recordId='') {
+
+    const recordData = {
+        id: recordId,
+        name: 'Adam Smith',
+        nickname: 'adam econ',
+        notes: 'Born in Scotland\n Wrote "The Wealth of Nations"'
+    }
+
+    return Promise.resolve(new Record(recordData))
+
+};
+
+const getAll = function(searchFragment='') {
 
     const adams = [
         {name: 'Adams Smith', id: 1},
@@ -18,4 +40,8 @@ const get = function(searchFragment='') {
 
 };
 
-export default get;
+const save = function(recordData) {
+
+};
+
+export {get, getAll}
