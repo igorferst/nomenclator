@@ -150,21 +150,25 @@ class RecordLink extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      goToEdit: false
+    }
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(id) {
-    alert('big town ' + id)
+  handleClick() {
+    this.setState({
+      goToEdit: true
+    })
   }
 
   render () {
-    const handleClick = this.handleClick.bind(this, this.props.record.id);
-
     return (
       <Col xs={4} sm={3}>
-        <Panel className="record-panel" onClick={handleClick}>
+        <Panel className="record-panel" onClick={this.handleClick}>
           <Panel.Body>{this.props.record.name}</Panel.Body>
         </Panel>
+        {this.state.goToEdit && <Redirect to={"/records/" + this.props.record.id}/>}
       </Col>
     )
   }
