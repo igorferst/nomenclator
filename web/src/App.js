@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import RecordForm from './RecordForm';
 import RecordSearch from './RecordSearch';
+import { get as getUser } from './user';
 import './App.css';
 
 class App extends Component {
@@ -13,9 +14,8 @@ class App extends Component {
       <div>
 
         <Switch>
-          <Route exact={true} path='/' render={() =>
-            <Redirect to="/records" />
-          } />
+          <Route exact={true} path='/' component={Home} />
+          <Route path='/login' component={Login} />
           <Route exact={true} path='/records' render={() =>
             <div>
               <LocalNavbar />
@@ -54,6 +54,44 @@ class LocalNavbar extends Component {
           </Navbar.Header>
         </Grid>
       </Navbar>
+    )
+  }
+
+}
+
+class Home extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      goToLogin: false,
+      goToMain: false
+    };
+  }
+
+  componentDidMount() {
+    getUser().then(
+      () => {this.setState({goToMain: true})},
+      () => {this.setState({goToLogin: true})}
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.goToLogin && <Redirect to='/login'/>}
+        {this.state.goToMain && <Redirect to='/records'/>}
+      </div>
+    )
+  }
+
+}
+
+class Login extends Component {
+
+  render() {
+    return (
+      <h1>Log In Please</h1>
     )
   }
 
