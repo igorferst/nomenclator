@@ -18,7 +18,7 @@ const get = function(recordId='') {
         id: recordId,
         name: 'Adam Smith',
         keywords: 'economist',
-        notes: 'Born in Scotland\n Wrote "The Wealth of Nations"'
+        notes: 'Born in Scotland\nWrote "The Wealth of Nations"'
     }
 
     return Promise.resolve(new Record(recordData))

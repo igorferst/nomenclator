@@ -24,13 +24,13 @@ class App extends Component {
           <Route path='/records/new' render={() =>
             <div>
               <LocalNavbar />
-              <Record isNew={true} />
+              <RecordForm isNew={true} />
             </div>
           } />
           <Route path='/records/:id' render={({match}) =>
             <div>
               <LocalNavbar />
-              <Record recordId={match.params.id} />
+              <RecordForm recordId={match.params.id} />
             </div>
           } />
         </Switch>
@@ -175,7 +175,7 @@ class RecordLink extends Component {
 
 }
 
-class Record extends Component {
+class RecordForm extends Component {
 
   constructor(props) {
     super(props);
@@ -183,6 +183,8 @@ class Record extends Component {
       isNew: false,
       record: new RecordModel()
     }
+
+    this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -206,6 +208,14 @@ class Record extends Component {
     })
   }
 
+  onPropertyChange (propertyName, event) {
+    const newValue = event.target.value;
+    this.setState((prevState) => {
+      prevState.record[propertyName] = newValue;
+      return prevState;
+    });
+  }
+
   onFormSubmit (event) {
     event.preventDefault();
   }
@@ -220,20 +230,34 @@ class Record extends Component {
             <Col sm={6}>
               <FormGroup controlId="formControlsName">
                 <ControlLabel>Name</ControlLabel>
-                <FormControl type="text" />
+                <FormControl
+                  type="text"
+                  value={this.state.record.name}
+                  onChange={this.onPropertyChange.bind(this, 'name')}
+                />
               </FormGroup>
             </Col>
             <Col sm={6}>
               <FormGroup controlId="formControlsKeywords">
                 <ControlLabel>Keywords</ControlLabel>
-                <FormControl type="text" />
+                <FormControl
+                  type="text"
+                  value={this.state.record.keywords}
+                  onChange={this.onPropertyChange.bind(this, 'keywords')}
+                />
               </FormGroup>
             </Col>
           </Row>
 
           <FormGroup controlId="formControlsNotes">
             <ControlLabel>Notes</ControlLabel>
-            <FormControl componentClass="textarea" maxLength={1000} rows={6} />
+            <FormControl
+              componentClass="textarea"
+              value={this.state.record.notes}
+              onChange={this.onPropertyChange.bind(this, 'notes')}
+              maxLength={1000}
+              rows={6}
+            />
           </FormGroup>
 
           <FormGroup>
