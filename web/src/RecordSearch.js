@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col, FormGroup, FormControl, Form, Panel } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router";
 
 import { getAll } from './records';
 
@@ -15,6 +16,7 @@ class RecordSearch extends Component {
     };
 
     this.handleSearchFragmentChange = this.handleSearchFragmentChange.bind(this);
+    this.onSearchFieldSubmit = this.onSearchFieldSubmit.bind(this);
   }
 
   handleSearchFragmentChange(searchFragment) {
@@ -24,9 +26,18 @@ class RecordSearch extends Component {
     });
   }
 
+  onSearchFieldSubmit (value) {
+    if (this.state.records.length === 1) {
+      const recordId = this.state.records[0].id;
+      this.props.history.push('/records/' + recordId);
+    } else if (this.state.records.length === 0) {
+      this.props.history.push('/records/new', {name: value});
+    }
+  };
+
   componentDidMount() {
     this.handleSearchFragmentChange(this.state.searchFragment);
-  }
+  };
 
   render() {
     return (
@@ -34,6 +45,7 @@ class RecordSearch extends Component {
         <SearchField
           searchFragment={this.state.searchFragment}
           onChange={this.handleSearchFragmentChange}
+          onSubmit={this.onSearchFieldSubmit}
         />
         <RecordLinkList records={this.state.records} />
       </div>
@@ -48,6 +60,8 @@ class SearchField extends Component {
     this.state = {
       value: ''
     };
+
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onChange(event) {
@@ -56,9 +70,14 @@ class SearchField extends Component {
     this.props.onChange(newVal);
   }
 
+  onSubmit(event) {
+    event.preventDefault();
+    this.props.onSubmit(this.state.value);
+  }
+
   render() {
     return (
-      <Form horizontal>
+      <Form onSubmit={this.onSubmit} horizontal>
         <FormGroup controlId="formHorizontalSearch" bsSize="large">
           <Col xs={12} sm={6} smOffset={3}>
             <FormControl
@@ -122,4 +141,4 @@ class RecordLink extends Component {
 
 };
 
-export default RecordSearch;
+export default withRouter(RecordSearch);

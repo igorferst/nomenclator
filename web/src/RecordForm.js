@@ -19,8 +19,14 @@ class RecordForm extends Component {
 
   componentDidMount() {
     if (this.props.isNew) {
-      this.setState({
-        isNew: true
+      const passedState = this.props.location.state;
+      const passedName = passedState ? passedState.name : null;
+      this.setState((prevState) => {
+        prevState.isNew = true;
+        if (passedName) {
+          prevState.record.name = passedName;
+        }
+        return prevState;
       })
       return
     }
