@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Grid, Navbar, Row, Col, FormGroup, FormControl, ControlLabel, Form, Panel, Button } from 'react-bootstrap';
 import { Route, Link, Switch, Redirect } from "react-router-dom";
+import { withRouter } from "react-router";
 
-import { getAll, get, Record as RecordModel } from './records';
+import { getAll, get, save, Record as RecordModel } from './records';
 import './Home.css';
 
 class App extends Component {
@@ -24,13 +25,13 @@ class App extends Component {
           <Route path='/records/new' render={() =>
             <div>
               <LocalNavbar />
-              <RecordForm isNew={true} />
+              <RecordFormWithRouter isNew={true} />
             </div>
           } />
           <Route path='/records/:id' render={({match}) =>
             <div>
               <LocalNavbar />
-              <RecordForm recordId={match.params.id} />
+              <RecordFormWithRouter recordId={match.params.id} />
             </div>
           } />
         </Switch>
@@ -218,6 +219,14 @@ class RecordForm extends Component {
 
   onFormSubmit (event) {
     event.preventDefault();
+    save(this.state.record).then(
+      () => {
+        this.props.history.push('/records');
+      },
+      (err) => {
+        console.error('Failed to save record', err);
+      }
+    )
   }
 
   render() {
@@ -271,5 +280,7 @@ class RecordForm extends Component {
   }
 
 }
+
+const RecordFormWithRouter = withRouter(RecordForm)
 
 export default App;

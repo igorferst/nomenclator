@@ -2,6 +2,7 @@ import axios from 'axios';
 import filter from 'lodash/filter';
 
 class Record {
+
     constructor(recordData) {
         recordData = recordData || {};
 
@@ -10,6 +11,16 @@ class Record {
         this.keywords = recordData.keywords || '';
         this.notes = recordData.notes || '';
     }
+
+    toJson() {
+        return {
+            id: this.id,
+            name: this.name,
+            keywords: this.keywords,
+            notes: this.notes
+        }
+    }
+
 }
 
 const get = function(recordId='') {
@@ -42,8 +53,9 @@ const getAll = function(searchFragment='') {
 
 };
 
-const save = function(recordData) {
-
+const save = function(recordModel) {
+    console.log(recordModel)
+    return Promise.resolve()
 };
 
-export {get, getAll, Record}
+export {get, getAll, save, Record}
