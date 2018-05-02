@@ -4,8 +4,8 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 import RecordForm from './RecordForm';
 import RecordSearch from './RecordSearch';
+import Login from './Login';
 import { get as getUser } from './user';
-import './App.css';
 
 class App extends Component {
 
@@ -82,16 +82,6 @@ class Home extends Component {
         {this.state.goToLogin && <Redirect to='/login'/>}
         {this.state.goToMain && <Redirect to='/records'/>}
       </div>
-    )
-  }
-
-}
-
-class Login extends Component {
-
-  render() {
-    return (
-      <h1>Log In Please</h1>
     )
   }
 
