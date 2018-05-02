@@ -98,7 +98,7 @@ class RecordLinkList extends Component {
   render() {
 
     const recElements = this.props.records.map((rec) =>
-      <RecordLink record={rec} key={rec.id}/>
+      <RecordLinkWithRouter record={rec} key={rec.id}/>
     );
 
     return (
@@ -116,16 +116,11 @@ class RecordLink extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      goToEdit: false
-    }
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    this.setState({
-      goToEdit: true
-    })
+    this.props.history.push('/records/' + this.props.record.id);
   }
 
   render () {
@@ -134,11 +129,12 @@ class RecordLink extends Component {
         <Panel className="record-panel" onClick={this.handleClick}>
           <Panel.Body>{this.props.record.name}</Panel.Body>
         </Panel>
-        {this.state.goToEdit && <Redirect push to={"/records/" + this.props.record.id}/>}
       </Col>
     )
   }
 
 };
+
+const RecordLinkWithRouter = withRouter(RecordLink);
 
 export default withRouter(RecordSearch);
