@@ -34,14 +34,22 @@ class RecordForm extends Component {
     const id = parseInt(this.props.recordId, 10);
     if (isNaN(id)) {
       console.error('Bad record ID: ' + this.props.recordId);
+      this.props.history.push('/records');
       return;
     }
 
-    get(this.props.recordId).then((record) => {
-      this.setState({
-        record: record
-      })
-    })
+    get(this.props.recordId).then(
+      (record) => {
+        this.setState({
+          record: record
+        })
+      },
+      (err) => {
+        alert('Unable to find record with ID ' + this.props.recordId)
+        console.error(err);
+        this.props.history.push('/records');
+      }
+    )
   }
 
   onPropertyChange (propertyName, event) {
@@ -59,7 +67,8 @@ class RecordForm extends Component {
         this.props.history.push('/records');
       },
       (err) => {
-        console.error('Failed to save record', err);
+        alert('Unable to save record');
+        console.error(err);
       }
     )
   }
