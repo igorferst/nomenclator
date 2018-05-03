@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Grid, Navbar } from 'react-bootstrap';
+import { Grid, Navbar, Nav, NavItem } from 'react-bootstrap';
 import { Route, Switch, Redirect } from "react-router-dom";
+import { withRouter } from "react-router";
 
 import RecordForm from './RecordForm';
 import RecordSearch from './RecordSearch';
 import Login from './Login';
-import { get as getUser } from './user';
+import { get as getUser, logout } from './user';
 
 class App extends Component {
 
@@ -18,19 +19,19 @@ class App extends Component {
           <Route path='/login' component={Login} />
           <Route exact={true} path='/records' render={() =>
             <div>
-              <LocalNavbar />
+              <LocalNavbarWithRouter />
               <RecordSearch />
             </div>
           } />
           <Route path='/records/new' render={() =>
             <div>
-              <LocalNavbar />
+              <LocalNavbarWithRouter />
               <RecordForm isNew={true} />
             </div>
           } />
           <Route path='/records/:id' render={({match}) =>
             <div>
-              <LocalNavbar />
+              <LocalNavbarWithRouter />
               <RecordForm recordId={match.params.id} />
             </div>
           } />
@@ -42,22 +43,39 @@ class App extends Component {
 
 class LocalNavbar extends Component {
 
+  logout() {
+    logout().then(
+      () => {
+        this.props.history.push('/');
+      },
+      (err) => {
+        alert('Unable to log out');
+        console.error(err);
+      }
+    )
+  }
+
   render () {
     return (
       <Navbar inverse>
-        <Grid>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="/">Nomenclator</a>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-        </Grid>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <a href="/">Nomenclator</a>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Nav pullRight onSelect={this.logout.bind(this)}>
+          <NavItem>
+            Log Out
+          </NavItem>
+        </Nav>
       </Navbar>
     )
   }
 
 }
+
+const LocalNavbarWithRouter = withRouter(LocalNavbar);
 
 class Home extends Component {
 
