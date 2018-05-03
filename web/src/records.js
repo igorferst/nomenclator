@@ -1,6 +1,8 @@
 import axios from 'axios';
 import filter from 'lodash/filter';
 
+import {apiHost} from './config';
+
 class Record {
 
     constructor(recordData) {

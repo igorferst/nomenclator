@@ -1,3 +1,5 @@
+import {apiHost} from './config';
+
 const login = function() {
     return Promise.resolve({})
 };

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col, FormGroup, FormControl, Form, Panel } from 'react-bootstrap';
-import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
 
 import { getAll } from './records';
