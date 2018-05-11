@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    volumes:
+      - .:/usr/src/nomenclator
+    ports:
+      - 3005:3005
+    entrypoint: ["/usr/src/nomenclator/entrypoint.sh"]
+    command: ["bin/rails", "server"]
