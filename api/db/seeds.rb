@@ -1,7 +1,10 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+Record.delete_all
+Record.create!(name: 'Adam Smith',
+  keywords: 'scotland econ wealth of nations theory moral sentiment',
+  notes:
+    %{Scottish economist.
+
+      Born 1723, died 1790.
+
+      Wrote Wealth of Nations.}
+  )
